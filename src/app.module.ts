@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import CoreModule from './modules/core.module';
 
 @Module({
   imports: [
@@ -10,15 +11,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.DATABASE_HOST,
-      port: parseInt(process.env.DATABASE_PORT),
-      username: process.env.DATABASE_USERNAME,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_DATABASE,
-      logging: process.env.LOGGING === 'true',
-      entities: [process.env.ENTITIES],
-      synchronize: process.env.SYNCHRONIXE === 'true',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '1234',
+      database: 'peep',
+      logging: true,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: false,
     }),
+    CoreModule,
   ],
 })
 export class AppModule {}

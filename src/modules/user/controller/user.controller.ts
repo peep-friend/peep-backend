@@ -1,7 +1,7 @@
 import { Body, Controller, Put } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { UserService } from '../service/user.service';
-import RequestUserUpdateDto from '../dto/RequestUserUpdate.dto';
+import RequestUserUpdateDto from '../dto/UserUpdate.dto';
 
 @ApiTags('User')
 @Controller({ path: '/user', version: '1' })

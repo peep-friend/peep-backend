@@ -7,14 +7,9 @@ export default class PeepUserSaveDto {
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty({ example: '1234' })
+  @ApiProperty({ example: '12345678' })
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
-  @MaxLength(20)
   password: string;
-
-  @ApiProperty({ example: '' })
-  @IsString()
-  token: string;
 }

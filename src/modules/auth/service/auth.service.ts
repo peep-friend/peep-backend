@@ -113,8 +113,8 @@ export class AuthService {
   public createAccessToken(user: User) {
     const cu = { id: user.id, email: user.email };
     return this.jwtService.sign(cu, {
-      secret: this.configService.get('JWT_SECRET'),
-      expiresIn: this.configService.get('expiresIn'),
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
     });
   }
 
@@ -122,8 +122,8 @@ export class AuthService {
     return this.jwtService.sign(
       { id },
       {
-        secret: this.configService.get('JWT_SECRET'),
-        expiresIn: this.configService.get('expiresIn'),
+        secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+        expiresIn: this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
       },
     );
   }

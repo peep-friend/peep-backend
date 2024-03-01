@@ -8,6 +8,6 @@ async function bootstrap() {
   //Swagger 환경설정 연결
   setUpSwagger(app);
 
-  await app.listen(3000);
+  await app.listen(8080);
 }
 bootstrap();

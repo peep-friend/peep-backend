@@ -6,14 +6,14 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import PeepUserSaveDto from '../dto/PeepUserSave.dto';
+import PeepUserSaveDto from '../dto/peep.user.save.dto.ts';
 import * as uuid from 'uuid';
 import { DataSource, Repository } from 'typeorm';
 import { UserType } from 'src/global/enum/UserType.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from 'src/modules/user/domain/user.entity';
 import * as bcrypt from 'bcrypt';
-import PeepUserLoginDto from '../dto/PeepUserLogin.dto';
+import PeepUserLoginDto from '../dto/peep.user.login.dto.ts';
 import JwtTokenDto from '../dto/create.access.token.dto';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';

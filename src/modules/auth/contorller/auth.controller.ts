@@ -5,7 +5,6 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import PeepUserSaveDto from '../dto/PeepUserSave.dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -15,7 +14,8 @@ import {
 } from '@nestjs/swagger';
 import { AuthService } from '../service/auth.service';
 import { AuthResponse } from 'src/global/response/auth.response';
-import PeepUserLoginDto from '../dto/PeepUserLogin.dto';
+import PeepUserLoginDto from '../dto/peep.user.login.dto.ts';
+import PeepUserSaveDto from '../dto/peep.user.save.dto.ts';
 
 @ApiTags('Auth')
 @Controller({ path: '/auth', version: '1' })

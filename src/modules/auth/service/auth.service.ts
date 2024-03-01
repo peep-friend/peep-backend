@@ -6,7 +6,6 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import PeepUserSaveDto from '../dto/peep.user.save.dto.ts';
 import * as uuid from 'uuid';
 import { DataSource, Repository } from 'typeorm';
 import { UserType } from 'src/global/enum/UserType.enum';
@@ -17,6 +16,7 @@ import PeepUserLoginDto from '../dto/peep.user.login.dto.ts';
 import JwtTokenDto from '../dto/create.access.token.dto';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import PeepUserSaveDto from '../dto/peep.user.save.dto.ts.js';
 
 @Injectable()
 export class AuthService {

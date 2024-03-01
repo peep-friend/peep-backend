@@ -29,9 +29,9 @@ ENV NODE_ENV=${NODE_ENV}
 COPY --from=build /usr/src/app/dist ./dist
 COPY package*.json ./
 
-# Install production dependencies only
+# Install development dependencies only
 RUN npm i -g pnpm
-RUN pnpm install --only=production
+RUN pnpm install --only=development
 
 # Remove development dependencies
 RUN rm package*.json

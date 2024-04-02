@@ -12,11 +12,13 @@ import { UserType } from 'src/global/enum/UserType.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from 'src/modules/user/domain/user.entity';
 import * as bcrypt from 'bcrypt';
-import PeepUserLoginDto from '../dto/peep.user.login.dto.ts';
+import PeepUserLoginDto from '../dto/peep.user.login.dto';
 import JwtTokenDto from '../dto/create.access.token.dto';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import PeepUserSaveDto from '../dto/peep.user.save.dto.ts.js';
+import PeepUserSaveDto from '../dto/peep.user.save.dto';
+import RequestSocialUserSaveDto from '../dto/social.user.save.dto';
+import RequestSocialUserLoginDto from '../dto/social.user.login.dto';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +28,73 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
+
+  public async saveSocialUser(dto: RequestSocialUserSaveDto) {
+    const userExist = await this.userRepository.exists({
+      where: {
+        type: dto.type,
+        token: dto.token,
+      },
+    });
+
+    if (userExist) {
+      throw new BadRequestException('이미 회원가입 되어있는 유저입니다.');
+    }
+
+    const isExistedByEmail = await this.userRepository.exists({
+      where: { email: dto.email },
+    });
+
+    if (isExistedByEmail) {
+      throw new BadRequestException('사용 중인 이메일입니다.');
+    }
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const user = await queryRunner.manager.save(
+        this.userRepository.create({
+          token: dto.token,
+          email: dto.email,
+          type: dto.type,
+          lastLoginDate: new Date(),
+        }),
+      );
+
+      const token = this.createToken(user);
+
+      return { user, token };
+    } catch (error) {
+      console.log(error);
+      await queryRunner.rollbackTransaction();
+
+      if (error instanceof HttpException) {
+        throw new HttpException(error.message, error.getStatus());
+      }
+
+      throw new InternalServerErrorException('Internal Server Error');
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  public async loginSocialUser(dto: RequestSocialUserLoginDto) {
+    const socialUser = await this.findUserByToken(dto.token, dto.type);
+
+    if (!socialUser) {
+      throw new NotFoundException('해당 유저가 없습니다.');
+    }
+
+    await this.userRepository.update(socialUser.id, {
+      lastLoginDate: new Date(),
+    });
+
+    const token = this.createToken(socialUser);
+
+    return { token, socialUser };
+  }
 
   public async savePeepUser(dto: PeepUserSaveDto) {
     const userExist = await this.checkUserExists(dto.email);
@@ -126,6 +195,15 @@ export class AuthService {
         expiresIn: this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
       },
     );
+  }
+
+  private async findUserByToken(token: string, type: UserType) {
+    const user = await this.userRepository.findOne({
+      where: { token, type },
+      select: ['id', 'nickname', 'email', 'password'],
+    });
+
+    return user;
   }
 
   private async checkUserExists(email: string): Promise<boolean> {

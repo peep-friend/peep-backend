@@ -18,8 +18,10 @@ import PeepUserSaveDto from '../dto/peep.user.save.dto';
 import RequestSocialUserSaveDto from '../dto/social.user.save.dto';
 import CommonResponse from 'src/global/dto/api.response';
 import RequestSocialUserLoginDto from '../dto/social.user.login.dto';
+import { createServerExceptionResponse } from 'src/global/response/common';
 
 @ApiTags('Auth')
+@ApiResponse(createServerExceptionResponse())
 @Controller({ path: '/auth', version: '1' })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

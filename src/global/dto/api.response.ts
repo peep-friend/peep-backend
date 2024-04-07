@@ -32,4 +32,14 @@ export default class CommonResponse<T> {
       message: payload.message,
     });
   }
+
+  static createResponseMessage<T>(payload: {
+    readonly statusCode: number;
+    readonly message: string;
+  }): CommonResponse<T> {
+    return new CommonResponse<T>({
+      statusCode: payload.statusCode,
+      message: payload.message,
+    });
+  }
 }

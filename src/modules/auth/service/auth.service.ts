@@ -15,10 +15,10 @@ import * as bcrypt from 'bcrypt';
 import PeepUserLoginDto from '../dto/peep.user.login.dto';
 import JwtTokenDto from '../dto/create.access.token.dto';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import PeepUserSaveDto from '../dto/peep.user.save.dto';
 import RequestSocialUserSaveDto from '../dto/social.user.save.dto';
 import RequestSocialUserLoginDto from '../dto/social.user.login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -168,7 +168,15 @@ export class AuthService {
     return { token, user };
   }
 
-  public async findUserByJwt(payload: any) {}
+  public async findUserByJwt(id: number): Promise<any> {
+    const findUser = await this.userRepository.findOne({
+      where: { id },
+    });
+    if (!findUser) {
+      throw new NotFoundException('Not Found User');
+    }
+    return findUser;
+  }
 
   public createToken(user: User) {
     const id = user.id;

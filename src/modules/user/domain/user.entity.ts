@@ -12,7 +12,7 @@ export default class User extends BaseTimeEntity {
     type: 'varchar',
     length: 120,
     comment: '이메일',
-    nullable: false,
+    nullable: true,
   })
   email: string;
 

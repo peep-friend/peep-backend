@@ -34,7 +34,7 @@ export default class User extends BaseTimeEntity {
 
   @Column({
     type: 'varchar',
-    length: 150,
+    length: 800,
     comment: '소셜토큰',
     nullable: true,
   })
